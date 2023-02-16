@@ -1,13 +1,15 @@
-import { arraySectionProps } from "@context/DailyDietContext";
+import { arrayFoodsProps } from "@context/DailyDietContext";
 
-type Props = (data: arraySectionProps[]) => number;
+type Props = (data: arrayFoodsProps[]) => number;
 
 export const registredFoods: Props = (data) => {
-    const listOfNumberOfFoods: number[] = data.map((item: arraySectionProps) => {
-        return item.data.length;
-    })
-    const numberOfMeals: number = listOfNumberOfFoods.reduce((total, food) => total + food, 0);
+    if(data){
+        const listOfNumberOfFoodsSize = data.length
+        return listOfNumberOfFoodsSize;
+    }else {
+        return 0;
+    }
 
-    return numberOfMeals;
+
 }
 

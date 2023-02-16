@@ -1,4 +1,4 @@
-import { createFoodStorage } from "@storage/createFoods";
+import { createFoodStorage } from "@storage/createFoodStorage";
 import { getAllFoods } from "@storage/getAllFoods";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { Alert } from "react-native";
@@ -9,7 +9,7 @@ export type arraySectionProps = {
     data: arrayFoodsProps[] 
 }
 export type arrayFoodsProps =  {
-  id: string | number[];
+  id: string;
   name: string;
   description: string;
   date: string;
@@ -19,14 +19,13 @@ export type arrayFoodsProps =  {
 
 export type DailyDietContextDataProps = {
   statusDiet: string;
-  arrayFoods: arraySectionProps[];
   foods: arrayFoodsProps[];
   setStatusDiet: (value: string) => void;
   getDietStatus: (value:string) => void;
   handleCreateNewFood: (data: arrayFoodsProps) => void;
-  handleUpdateFood: (data: arrayFoodsProps, id: string | number[]) => void;
-  handleRemoveFood: (id: string | number[]) => void;
-  fetchFoodStorage: ()=> Promise<void>;
+  handleUpdateFood: (data: arrayFoodsProps, id: string) => void;
+  handleRemoveFood: (id: string) => void;
+  fetchFoods: () => Promise<void>
 }
 
 type DailyDietContextProviderProps = {
@@ -38,7 +37,6 @@ export const DailyContext = createContext<DailyDietContextDataProps>(
 );
 
 export const DailyDietContextProvider = ({ children }: DailyDietContextProviderProps) => {
-  const [arrayFoods, setArrayFoods] = useState<arraySectionProps[]>([]);
   const [foods, setFoods] = useState<arrayFoodsProps[]>([]);
   const [statusDiet, setStatusDiet] = useState('');
 
@@ -46,9 +44,9 @@ export const DailyDietContextProvider = ({ children }: DailyDietContextProviderP
     setStatusDiet(value)
   }
 
-   const  handleCreateNewFood = async ({name, description, date, hour} : arrayFoodsProps) => {
+   const  handleCreateNewFood =  ({name, description, date, hour} : arrayFoodsProps) => {
 
-    const id = uuid.v4()
+    const id = uuid.v4() as string
     const newFood = {
         id,
         name,
@@ -57,17 +55,10 @@ export const DailyDietContextProvider = ({ children }: DailyDietContextProviderP
         hour,
         status: statusDiet,
     }
-    const newArray = {
-        title: date,
-        data: [newFood]
-    }
-    setFoods(oldState => [...oldState, newFood])
-    setArrayFoods(oldState => [...oldState, newArray])
-    createFoodStorage(newFood)
-
+    setFoods(oldState => [...oldState, newFood]);
 }
 
-const handleUpdateFood = ({ name, description, date, hour} : arrayFoodsProps, id: string | number[]) => {
+const handleUpdateFood = ({ name, description, date, hour} : arrayFoodsProps, id: string) => {
 
   const searchFoodSelected = foods.map((item: arrayFoodsProps) => {
     return item;
@@ -81,42 +72,42 @@ const foodFoundById = searchFoodSelected.find(item => item.id === id)
    foodFoundById.description = description ?? foodFoundById.description
    foodFoundById.date = date ?? foodFoundById.date
    foodFoundById.hour = hour ?? foodFoundById.hour
-   foodFoundById.status = statusDiet
+   foodFoundById.status = statusDiet 
 
    setFoods(oldState => [...oldState])
-
   }
 }
 
-const handleRemoveFood = (id: string | number[]) => {
-  const searchFoodSelected = foods.map((item: arrayFoodsProps) => {
-    return item;
+const handleRemoveFood = async (id: string) => {
+  const foodsFilterd = foods.filter((item: arrayFoodsProps) => {
+    return item.id !== id
 });
-
-const newArray = searchFoodSelected.filter(item => item.id != id)
-  setFoods(newArray)
-
+  setFoods(foodsFilterd)
+  await createFoodStorage(foodsFilterd)
 }
 
-async function fetchFoodStorage() {
+async function fetchFoods() {
   try {
-    // setIsLoading(true);
-
-    const data = await getAllFoods();
-    console.log(data)
-
+    const responseData = await getAllFoods();
+    setFoods(responseData)
   } catch (error) {
     Alert.alert('Refeições', 'Não foi possível carregar as refeições');
     console.log(error)
   } finally {
-    // setIsLoading(false);
   } 
 }
+
+async function updateStateAndSetStorage(){
+  await createFoodStorage(foods)
+}
+
+useEffect(() => {
+    updateStateAndSetStorage();
+  }, [foods]);
 
   return (
     <DailyContext.Provider
       value={{
-        arrayFoods,
         statusDiet,
         foods,
         setStatusDiet,
@@ -124,7 +115,7 @@ async function fetchFoodStorage() {
         handleCreateNewFood,
         handleUpdateFood,
         handleRemoveFood,
-        fetchFoodStorage,
+        fetchFoods,
       } 
       }
     >

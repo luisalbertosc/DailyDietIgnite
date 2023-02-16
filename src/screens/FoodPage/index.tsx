@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 
-import { arrayFoodsProps, DailyContext } from '@context/DailyDietContext';
+import { arrayFoodsProps, arraySectionProps, DailyContext } from '@context/DailyDietContext';
 
 import { ButtonIcon } from "@components/ButtonIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -14,7 +14,7 @@ export function FoodPage() {
     const { foods, handleRemoveFood } = useContext(DailyContext);
 
     type RouteParamsProps = {
-        id: string | number[]
+        id: string
     };
 
     const route = useRoute();
@@ -35,10 +35,12 @@ export function FoodPage() {
         }
     }
 
-    function handleRemoveButton(id: string | number[]){
-        handleRemoveFood(id)
-        navigation.goBack();
-
+    function handleRemoveButton(){
+        if(foodFoundById){
+            handleRemoveFood(id)
+            navigation.goBack();    
+        }
+     
     }
 
     function cancelRemove(){
@@ -95,7 +97,7 @@ export function FoodPage() {
 
                 </ButtonsContainer>
             </InfoContainer>
-            <ModalRemove isShowModal={isShowModal} onCancelRemove={cancelRemove} onHandleRemoveButton={()=> handleRemoveButton(id)}/>
+            <ModalRemove isShowModal={isShowModal} onCancelRemove={cancelRemove} onHandleRemoveButton={()=> handleRemoveButton()}/>
         </FoodPageContainer>
         
     )

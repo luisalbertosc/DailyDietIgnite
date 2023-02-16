@@ -5,14 +5,18 @@ type RadioProps = {
     options: [
         'SIM', 'NÃO'
     ];
+    statusDietYesOrNo: string | boolean;
     onChangeSelect: (value:any) => void
 }
 
-export function Radio({ options, onChangeSelect}: RadioProps){
-    const [focusGreen, setFocusGreen] = useState(false);
-    const [focusRed, setFocusRed] = useState(false);
+export function Radio({ options, statusDietYesOrNo, onChangeSelect}: RadioProps){
 
-    
+    const isStatusYes = statusDietYesOrNo === 'SIM'? true : false
+    const isStatusNo = statusDietYesOrNo === 'NÃO'? true : false
+
+    const [focusGreen, setFocusGreen] = useState(isStatusYes);
+    const [focusRed, setFocusRed] = useState(isStatusNo);
+
 
     function handleButtonRadio(value: string){
         onChangeSelect(value)

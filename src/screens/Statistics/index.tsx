@@ -20,12 +20,12 @@ import { foodsOnDietStraight } from '@utils/FoodsOnDietStraight';
 
 
 export function Statistics(){
-    const { arrayFoods} = useContext(DailyContext);
+    const { foods} = useContext(DailyContext);
 
     const foodsStatistics = {
-        registredFoods: registredFoods(arrayFoods),
-        foodsOnDiet: foodsOnDiet(arrayFoods),
-        foodsOnDietStraight: foodsOnDietStraight(arrayFoods)
+        registredFoods: registredFoods(foods),
+        foodsOnDiet: foodsOnDiet(foods),
+        foodsOnDietStraight: foodsOnDietStraight(foods)
     }
 
     const foodsOutOfDiet = foodsStatistics.registredFoods - foodsStatistics.foodsOnDiet

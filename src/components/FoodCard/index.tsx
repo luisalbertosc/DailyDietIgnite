@@ -3,14 +3,12 @@ import { TouchableOpacityProps } from 'react-native';
 
 
 type Props = TouchableOpacityProps & {
-    id: string | number[];
+    id: string;
     title: string;
     hour: string;
     variant?: FoodIconProps;
-    onHandle: (id: string | number[]) => void;
+    onHandle: (id: string) => void;
   }
-  
-
 
 export function FoodCard({id, title, hour, variant, onHandle, ...rest}: Props){
     return(

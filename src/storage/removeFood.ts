@@ -1,21 +1,24 @@
-import { arrayFoodsProps } from "@context/DailyDietContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { FOOD_COLLECTION } from '@storage/storageConfig';
 import { getAllFoods } from "./getAllFoods";
 
-export async function createFoodStorage(newFood: arrayFoodsProps) {
+export async function removeFood(id: string) {
   try {
 
     const storedGroups = await getAllFoods();
+    const filteredFoods = storedGroups.filter(item => item.id != id)
 
-    if(!storedGroups) {
-      throw console.log('Não foi possível encontrar a Array de Refeições no Storage')
+    if(!filteredFoods) {
+      throw console.log('Erro')
     }
 
-    const storage = JSON.stringify([...storedGroups, newFood]);
+    const storage = JSON.stringify(filteredFoods);
+    console.log(storage)
+
 
     await AsyncStorage.setItem(FOOD_COLLECTION, storage);
+
   } catch (error) {
     throw error;
   }

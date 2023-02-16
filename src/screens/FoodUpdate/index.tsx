@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useCallback, useContext } from "react";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 
 import { Alert } from "react-native";
@@ -19,10 +19,10 @@ type NewFoodProps = arrayFoodsProps & {
 }
 
 export function FoodUpdate() {
-    const {foods, handleUpdateFood} = useContext(DailyContext);
-    
+    const {foods, statusDiet, setStatusDiet, handleUpdateFood} = useContext(DailyContext);
+
     type RouteParamsProps = {
-        id: string | number[]
+        id: string
     };
 
     const route = useRoute();
@@ -32,8 +32,16 @@ export function FoodUpdate() {
         return item;
     })
 
-    const foodFoundById = searchFoodSelected.find(item => item.id === id)
+    const foodFoundById = searchFoodSelected.find(item => item.id === id) as arrayFoodsProps
 
+    function setStatusByFocus(){
+        if(foodFoundById){
+            setStatusDiet(foodFoundById.status)
+        } else{
+            setStatusDiet(statusDiet)
+        }
+    }
+    
     const { control, handleSubmit, formState: { errors } } = useForm<NewFoodProps>({
         defaultValues: {
             name: `${foodFoundById?.name}`,
@@ -59,8 +67,11 @@ export function FoodUpdate() {
           }
         handleUpdateFood(data, id)
         navigation.navigate('foodPage', {id});
-
     }
+
+    useFocusEffect(useCallback(() => {
+        setStatusByFocus();
+      }, []))
 
     return (
         <NewFoodContainer>
@@ -129,7 +140,7 @@ export function FoodUpdate() {
                         </DataAndHourInput>
                     </DataAndHourContainer>
 
-                    <InputButton />
+                    <InputButton statusDietYesOrNo={foodFoundById ? foodFoundById.status : false} />
                 </ItensForm>
                 <Button
                     onPress={handleSubmit(handleUpdatAndGoFoodPage)}

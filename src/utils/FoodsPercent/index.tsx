@@ -1,11 +1,11 @@
-import { arraySectionProps } from "@context/DailyDietContext";
+import { arrayFoodsProps } from "@context/DailyDietContext";
 import { foodsOnDiet } from "../FoodsOnDiet";
 import { registredFoods } from "../RegistredFoods";
 
-type Props = (data: arraySectionProps[]) => any;
+type Props = (data: arrayFoodsProps[]) => any;
 
 export const foodsPercent: Props = (data) => {
-    if(!data.length)
+    if(!data)
         return '0%';
         
     const registredAllMeals: number = registredFoods(data);

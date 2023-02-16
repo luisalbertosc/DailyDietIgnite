@@ -8,10 +8,10 @@ import { foodsPercent } from '@utils/FoodsPercent';
 type StatisticsButtonProps = TouchableOpacityProps & {
 }
 export function StatisticsButton({...rest}: StatisticsButtonProps){
-    const { arrayFoods} = useContext(DailyContext);
+    const { foods} = useContext(DailyContext);
 
     const foodsStatistics = {
-        foodsPercent: foodsPercent(arrayFoods)
+        foodsPercent: foodsPercent(foods)
     }
 
 

@@ -7,15 +7,17 @@ import {
 
 } from "./styles";
 
+type InputButtonProps = {
+    statusDietYesOrNo: string | boolean
+}
 
-
-export function InputButton() {
+export function InputButton({statusDietYesOrNo}: InputButtonProps) {
     const {getDietStatus} = useContext(DailyContext);
 
     return (
         <InputButtonContainer>
             <TitleInput>Está dentro da dieta?</TitleInput>
-            <Radio options={['SIM', 'NÃO']} onChangeSelect={getDietStatus} />
+            <Radio options={['SIM', 'NÃO']} onChangeSelect={getDietStatus} statusDietYesOrNo={statusDietYesOrNo}/>
         </InputButtonContainer>
     )
 }

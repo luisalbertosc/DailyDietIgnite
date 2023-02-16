@@ -1,6 +1,7 @@
 import { useCallback, useContext } from 'react';
-
 import { SectionList } from 'react-native'
+
+
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { FoodListContainer, Heading, HomeContainer, StatisticsButtonContainer, TextButtonContainer, Title } from "./styles"
@@ -10,12 +11,14 @@ import { StatisticsButton } from "@components/StatisticsButton"
 import { ButtonIcon } from "@components/ButtonIcon"
 import { FoodCard } from '@components/FoodCard'
 import { DailyContext } from '@context/DailyDietContext';
+import { ListEmpty } from '@components/ListEmpty';
+import { transformListInSectionList } from '@utils/transformListInSectionList';
+
 
 
 export function Home() {
-  const {arrayFoods, fetchFoodStorage} = useContext(DailyContext);
+  const { foods, fetchFoods } = useContext(DailyContext);
 
-    
   const navigation = useNavigation()
 
   function handleOpenStatistics(){
@@ -26,14 +29,14 @@ export function Home() {
     navigation.navigate('new')
   }
 
-  function handleOpenFoodPage(id:string | number[]){
+  function handleOpenFoodPage(id: string){
     navigation.navigate('foodPage', {id})
 
   }
 
-  useFocusEffect(useCallback(() => {
-    fetchFoodStorage();
-  }, []))
+    useFocusEffect(useCallback(() => {
+      fetchFoods();
+    }, []))
 
     return (
         <HomeContainer>
@@ -53,10 +56,11 @@ export function Home() {
                 />
             </TextButtonContainer>
             <FoodListContainer>
-              <SectionList
-                sections={arrayFoods}
-                keyExtractor={(item, index) => item.hour + index}
-                renderItem={({ item }) => 
+            {foods.length > 0 ? 
+            <SectionList
+            sections={transformListInSectionList()}
+            keyExtractor={(item, index) => item.hour + index}
+            renderItem={({ item }) => 
               <FoodCard
                 id={item.id}
                 title={item.name}
@@ -64,14 +68,17 @@ export function Home() {
                 variant={item.status === "SIM" ? 'GREEN' : 'RED'}
                 onHandle={handleOpenFoodPage}
               />}
-              renderSectionHeader={({ section }) => (
-                <Heading>{section.title}</Heading>
-              )}
-              contentContainerStyle={
-                arrayFoods.length === 0 && { flex: 1, justifyContent: "center" }
-              }
-              showsVerticalScrollIndicator={false}
-              />
+            renderSectionHeader={({ section }) => (
+            <Heading>{section.title}</Heading>
+          )}
+           showsVerticalScrollIndicator={false}
+          
+          />
+          :
+          <ListEmpty />
+
+            }
+             
             </FoodListContainer>
         </HomeContainer>
     )

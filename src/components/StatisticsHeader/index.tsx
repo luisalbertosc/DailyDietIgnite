@@ -9,10 +9,10 @@ type StatisticsButtonProps = {
 }
 
 export function StatisticsHeader({ onHandleGoBack}: StatisticsButtonProps){
-    const { arrayFoods} = useContext(DailyContext);
+    const { foods} = useContext(DailyContext);
 
     const foodsStatistics = {
-        foodsPercent: foodsPercent(arrayFoods)
+        foodsPercent: foodsPercent(foods)
     }
     return(
         <StatisticsHeaderContainer variant={foodsStatistics.foodsPercent > 70 ? 'GREEN' : "RED"}>
