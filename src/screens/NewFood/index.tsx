@@ -95,6 +95,7 @@ export function NewFood() {
                                 rules={{ required: "Informe a data" }}
                                 render={({ field: { onChange, value } }) => (
                                     <InputDataAndHour
+                                        placeholder="dd/mm/aaaa"
                                         onChangeText={onChange}
                                         value={value}
                                     />
@@ -111,6 +112,7 @@ export function NewFood() {
                                 rules={{ required: "Informe a hora" }}
                                 render={({ field: { onChange, value } }) => (
                                     <InputDataAndHour
+                                        placeholder="hh:mm"
                                         onChangeText={onChange}
                                         value={value}
                                     />
@@ -120,7 +122,7 @@ export function NewFood() {
                         </DataAndHourInput>
                     </DataAndHourContainer>
 
-                    <InputButton />
+                    <InputButton statusDietYesOrNo/>
                 </ItensForm>
                 <Button
                     onPress={handleSubmit(handleCreateAndNavigate)}

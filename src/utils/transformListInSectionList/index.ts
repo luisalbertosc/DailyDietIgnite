@@ -12,16 +12,16 @@ export function transformListInSectionList(){
         acc[food.date].push(food)
       return acc;
     },{})
-    for(const prop of Object.keys(arrayCompared)){
-      const data = arrayCompared[prop]
-      const newArray = [{
-        title: prop,
-        data
-      }]
-    return newArray
-    }
-    return arrayCompared;
+    
+    const sectionListData = Object.keys(arrayCompared).map((item) => {
+      const data = arrayCompared[item];
+      return {
+        title: item,
+        data,
+      };
+    });
 
+    return sectionListData;
     // const lastFood = foods[foods.length-1]
 
     // if(!lastFood){

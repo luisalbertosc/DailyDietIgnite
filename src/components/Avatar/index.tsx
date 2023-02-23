@@ -1,8 +1,10 @@
-import { AvatarContainer } from "./styles";
+import { AvatarContainer, Icon } from "./styles";
 
 
 export function Avatar(){
     return(
-        <AvatarContainer/>
+        <AvatarContainer>
+            <Icon name="person"/>
+        </AvatarContainer>
     )
 }
