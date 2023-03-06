@@ -1,23 +1,37 @@
 import { useContext, useState } from 'react';
 
-import { arrayFoodsProps, arraySectionProps, DailyContext } from '@context/DailyDietContext';
+import { arrayFoodsProps, DailyContext } from '@context/DailyDietContext';
 
 import { ButtonIcon } from "@components/ButtonIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { ButtonsContainer, DataAndHour, DateAndHourTitle, FoodPageContainer, HeaderContainer, Icon, IconCircle, IconContainer, InfoContainer, InfoTitle, LabelDietStatus, LabelDietStatusText, MarginButton, Message, Ttile } from "./styles";
+import { ButtonsContainer, 
+        DataAndHour, 
+        DateAndHourTitle, 
+        FoodPageContainer, 
+        HeaderContainer, 
+        Icon, 
+        IconCircle, 
+        IconContainer, 
+        InfoContainer, 
+        InfoTitle, 
+        LabelDietStatus, 
+        LabelDietStatusText, 
+        MarginButton, 
+        Message, 
+        Ttile } from "./styles";
 import { ModalRemove } from '@components/ModalRemove';
 
 
 export function FoodPage() {
-    const [isShowModal, setIsShowModal] = useState(false);
-    const navigation = useNavigation();
     const { foods, handleRemoveFood } = useContext(DailyContext);
+    const navigation = useNavigation();
+    const [isShowModal, setIsShowModal] = useState(false);
+    const route = useRoute();
 
     type RouteParamsProps = {
         id: string
     };
 
-    const route = useRoute();
     const { id } = route.params as RouteParamsProps;
 
 
@@ -40,7 +54,6 @@ export function FoodPage() {
             handleRemoveFood(id)
             navigation.goBack();    
         }
-     
     }
 
     function cancelRemove(){

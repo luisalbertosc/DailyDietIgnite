@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { SectionList } from 'react-native'
 
 
@@ -18,6 +18,8 @@ import { transformListInSectionList } from '@utils/transformListInSectionList';
 
 export function Home() {
   const { foods, fetchFoods } = useContext(DailyContext);
+  const [listFoods, setListFoods] = useState(foods);
+
 
   const navigation = useNavigation()
 
@@ -31,7 +33,6 @@ export function Home() {
 
   function handleOpenFoodPage(id: string){
     navigation.navigate('foodPage', {id})
-
   }
 
     useFocusEffect(useCallback(() => {
@@ -56,7 +57,7 @@ export function Home() {
                 />
             </TextButtonContainer>
             <FoodListContainer>
-            {foods.length > 0 ? 
+            {listFoods.length > 0 ? 
             <SectionList
             sections={transformListInSectionList()}
             keyExtractor={(item, index) => item.hour + index}
